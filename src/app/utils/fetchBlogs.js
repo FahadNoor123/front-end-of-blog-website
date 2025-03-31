@@ -1,4 +1,5 @@
 // utils/fetchBlogs.js
+
 export async function fetchBlogsData(category = "",) {
     try {
       const categoryParam = category ? `&category=${encodeURIComponent(category)}` : "";
