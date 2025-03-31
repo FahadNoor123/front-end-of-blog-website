@@ -1,7 +1,12 @@
 {
-    "version": 2,
-    "name": "chai-backend",
-    "builds": [{ "src": "page.js", "use": "@vercel/node" }],
-    "routes": [{ "src": "/(.*)", "dest": "/page.js" }]
-  }
-  
+  "rewrites": [
+    {
+      "source": "/sitemap.xml",
+      "destination": "/sitemap.xml"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/"
+    }
+  ]
+}
