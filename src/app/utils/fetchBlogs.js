@@ -4,7 +4,7 @@ export async function fetchBlogsData(category = "",) {
     try {
       const categoryParam = category ? `&category=${encodeURIComponent(category)}` : "";
 
-      const res = await fetch("http://localhost:3000/api/v1/blog/getblogs?page=${page}&limit=${limit}${categoryParam}", {
+      const res = await fetch("https://backend-of-blog-website.vercel.app/api/v1/blog/getblogs?page=${page}&limit=${limit}${categoryParam}", {
         cache: "no-store", // Prevent caching for fresh data
       });
       const data = await res.json();
@@ -41,7 +41,7 @@ export async function fetchBlogsData(category = "",) {
   // ✅ Fetch a specific blog by its slug
 export async function fetchBlogBySlug(slug) {
   try {
-    const res = await fetch(`http://localhost:3000/api/v1/blog/getblog/${slug}`, {
+    const res = await fetch(`https://backend-of-blog-website.vercel.app/api/v1/blog/getblog/${slug}`, {
       cache: "no-store", // Ensures fresh data
     });
 
@@ -60,7 +60,7 @@ export async function fetchBlogBySlug(slug) {
 
 //
 export async function fetchRelatedBlogs(category, currentSlug) {
-  const res = await fetch(`http://localhost:3000/api/v1/blog/related?category=${category}&slug=${currentSlug}`);
+  const res = await fetch(`https://backend-of-blog-website.vercel.app/api/v1/blog/related?category=${category}&slug=${currentSlug}`);
   const blogs = await res.json();
 
   // Exclude the current blog from related blogs
