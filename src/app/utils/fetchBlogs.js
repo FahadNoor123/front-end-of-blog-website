@@ -4,7 +4,7 @@ export async function fetchBlogsData(category = "",) {
     try {
       const categoryParam = category ? `&category=${encodeURIComponent(category)}` : "";
 
-      const res = await fetch(`${NEXT_PUBLIC_API_BASE_URL}/api/v1/blog/getblogs?page=${page}&limit=${limit}${categoryParam}`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/blog/getblogs?page=${page}&limit=${limit}${categoryParam}`, {
         cache: "no-store", // Prevent caching for fresh data
       });
       const data = await res.json();
