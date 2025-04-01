@@ -83,6 +83,7 @@ const paginatedNews = news.latest.slice(startIndex, startIndex + limit);
         {/* Featured Image - Constrain mobile height */}
         {featuredNews.blogImage?.length > 0 && (
           <div className="md:flex-shrink-0 md:w-1/2">
+                      <Link href={`/blog/${featuredNews.category.toLowerCase()}/${featuredNews.slug}`}>
             <Image
               src={featuredNews.blogImage[0]}
               alt={featuredNews.title}
@@ -91,6 +92,7 @@ const paginatedNews = news.latest.slice(startIndex, startIndex + limit);
               className="w-full h-48 md:h-[300px] object-cover"
               priority={true}
             />
+            </Link>
           </div>
         )}
 
