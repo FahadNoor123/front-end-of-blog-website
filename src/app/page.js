@@ -135,6 +135,7 @@ const paginatedNews = news.latest.slice(startIndex, startIndex + limit);
           <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3">
             {paginatedNews.map((article) => (
               <div key={article.id} className="bg-white rounded-lg shadow-md overflow-hidden">
+                 <Link href={`/blog/${article.category.toLowerCase()}/${article.slug}`}>
                 <Image
                   src={article.blogImage[0]}
                   alt={article.title}
@@ -143,6 +144,7 @@ const paginatedNews = news.latest.slice(startIndex, startIndex + limit);
                   className="w-full h-auto sm:h-48 object-cover"
                   loading="lazy"
                 />
+                    </Link>
                 <div className="p-2">
                   <span className="inline-block px-3 py-1 text-xs font-semibold text-blue-600 bg-blue-100 rounded-full">
                     {article.category}
