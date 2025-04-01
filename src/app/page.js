@@ -27,34 +27,44 @@ const paginatedNews = news.latest.slice(startIndex, startIndex + limit);
   return (
     <div className="min-h-screen bg-gray-50">
           {/* Categories Navigation */}
-          <div className="bg-gray-800 text-white">
-        <div className="container mx-auto px-4 py-2">
-          <div className="flex items-center overflow-x-auto whitespace-nowrap">
-            <span className="mr-6 font-semibold">Categories:</span>
+<div className="bg-gray-800 text-white text-xs">
+  <div className="container mx-auto px-2 py-1">
+    <div className="flex items-center overflow-x-auto w-full py-2 gap-2">
+      {/* Categories label - stays visible on all screens */}
+      <span className="text-sm sm:text-base font-semibold shrink-0">Categories:</span>
+      
+      {/* Scrollable categories list */}
+      <div className="flex items-center overflow-x-auto w-full pb-2 sm:pb-0 gap-2 sm:gap-6">
+        <Link
+          href={`/blog`}
+          className={`text-sm sm:text-base shrink-0 hover:text-blue-300 transition duration-200 ${
+            !category ? "text-blue-400 font-bold" : ""
+          }`}
+        >
+          All
+        </Link>
+        
+        {categories.length > 0 ? (
+          categories.map((cat) => (
             <Link
-              href={`/blog`}
-              className={`mr-6 hover:text-blue-300 transition duration-200 ${!category ? "text-blue-400 font-bold" : ""}`}
+              key={cat.id}
+              href={`/blog/${cat.slug}`}
+              className={`text-sm sm:text-base shrink-0 hover:text-blue-300 transition duration-200 ${
+                category === cat.slug ? "text-blue-400 font-bold" : ""
+              }`}
             >
-              All
+              {cat.name}
             </Link>
-            {categories.length > 0 ? (
-              categories.map((cat) => (
-                <Link
-                  key={cat.id}
-                  href={`/blog/${cat.slug}`}
-                  className={`mr-6 hover:text-blue-300 transition duration-200 ${
-                    category === cat.slug ? "text-blue-400 font-bold" : ""
-                  }`}
-                >
-                  {cat.name}
-                </Link>
-              ))
-            ) : (
-              <span className="text-gray-400">No categories available</span>
-            )}
-          </div>
-        </div>
+          ))
+        ) : (
+          <span className="text-sm sm:text-base text-gray-400 shrink-0">
+            No categories available
+          </span>
+        )}
       </div>
+    </div>
+  </div>
+</div>
 
       {/* AD Area */}
       {/* <Banner/> */}
