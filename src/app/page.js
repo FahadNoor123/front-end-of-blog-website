@@ -89,7 +89,7 @@ const paginatedNews = news.latest.slice(startIndex, startIndex + limit);
                     {featuredNews.category}
                   </div>
                   <Link
-                    href={`/blog/${featuredNews.category}/${featuredNews.slug}`}
+                    href={`/blog/${featuredNews.category.toLowerCase()}/${featuredNews.slug}`}
                     className="block mt-2 text-2xl font-semibold text-gray-900 hover:text-blue-600"
                   >
                     {featuredNews.title}
@@ -102,7 +102,7 @@ const paginatedNews = news.latest.slice(startIndex, startIndex + limit);
                     <span>{new Date(featuredNews.publishedAt).toDateString()}</span>
                   </div>
                   <Link
-                    href={`/blog/${featuredNews.slug}`}
+                    href={`/blog/${featuredNews.category.toLowerCase()}/${featuredNews.slug}`}
                     className="mt-6 inline-block px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-200"
                   >
                     Read More
