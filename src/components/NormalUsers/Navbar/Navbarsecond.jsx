@@ -103,38 +103,77 @@ const Navbarsecond = () => {
           {isOpen ? "✖" : "☰"} {/* X for open, ☰ for closed */}
         </button>
 
+       
         {/* Navigation Links */}
-        <nav className={`absolute md:relative top-16 left-0 w-full md:w-auto bg-white md:bg-transparent shadow-md md:shadow-none md:flex ${isOpen ? "block" : "hidden"} transition-all`}>
-          <ul className="flex flex-col md:flex-row md:space-x-6 space-y-4 md:space-y-0 p-4 md:p-0">
-            <li><Link href="/" className="mr-6 hover:text-blue-300 transition duration-200 text-white">Home</Link></li>
-            <li><Link href="/about" className="mr-6 hover:text-blue-300 transition duration-200 text-white">About</Link></li>
-            <li><Link href="/contact" className="mr-6 hover:text-blue-300 transition duration-200 text-white">Contact</Link></li>
-            {isLoggedin ? (
-              <li><button onClick={handleLogout} className="mr-6 hover:text-blue-300 transition duration-200 text-white">Logout</button></li>
-            ) : (
-              <li><Link href="/login" className="mr-6 hover:text-blue-300 transition duration-200 text-white">Login</Link></li>
-            )}
-            <li>
-              {loading ? (
-                <div className="animate-pulse flex items-center space-x-2">
-                  <div className="w-8 h-8 bg-gray-300 rounded-full"></div>
-                  <div className="w-24 h-4 bg-gray-300 rounded"></div>
-                </div>
-              ) : user ? (
-                <Link href="/profile" className="flex items-center space-x-2 hover:text-blue-400">
-                  <p className="font-medium cursor-pointer">{user.username}</p>
-                  <Image
-                    src={user.profileImage || '/default-avatar.png'}
-                    alt="Profile"
-                    width={40}
-                    height={40}
-                    className="rounded-full border-2 border-blue-300 hover:border-blue-500 transition"
-                  />
-                </Link>
-              ) : null}
-            </li>
-          </ul>
-        </nav>
+<nav
+  className={`absolute md:relative top-16 left-0 w-full md:w-auto bg-black md:bg-transparent shadow-md md:shadow-none md:flex ${isOpen ? "block" : "hidden"} transition-all`}
+>
+  <ul className="flex flex-col md:flex-row md:space-x-6 space-y-4 md:space-y-0 p-4 md:p-0">
+    <li>
+      <Link href="/" className="text-white hover:text-gray-400 transition">
+        Home
+      </Link>
+    </li>
+    <li>
+      <Link
+        href="/about"
+        className="text-white hover:text-gray-400 transition duration-200"
+      >
+        About
+      </Link>
+    </li>
+    <li>
+      <Link
+        href="/contact"
+        className="text-white hover:text-gray-400 transition duration-200"
+      >
+        Contact
+      </Link>
+    </li>
+    {isLoggedin ? (
+      <li>
+        <button
+          onClick={handleLogout}
+          className="text-white hover:text-gray-400 transition duration-200"
+        >
+          Logout
+        </button>
+      </li>
+    ) : (
+      <li>
+        <Link
+          href="/login"
+          className="text-white hover:text-gray-400 transition duration-200"
+        >
+          Login
+        </Link>
+      </li>
+    )}
+    <li>
+      {loading ? (
+        <div className="animate-pulse flex items-center space-x-2">
+          <div className="w-8 h-8 bg-gray-300 rounded-full"></div>
+          <div className="w-24 h-4 bg-gray-300 rounded"></div>
+        </div>
+      ) : user ? (
+        <Link
+          href="/profile"
+          className="flex items-center space-x-2 hover:text-gray-400"
+        >
+          <p className="font-medium cursor-pointer">{user.username}</p>
+          <Image
+            src={user.profileImage || "/default-avatar.png"}
+            alt="Profile"
+            width={40}
+            height={40}
+            className="rounded-full border-2 border-blue-300 hover:border-blue-500 transition"
+          />
+        </Link>
+      ) : null}
+    </li>
+  </ul>
+</nav>
+
       </div>
     </div>
   </header>
