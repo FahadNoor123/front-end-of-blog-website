@@ -13,8 +13,9 @@ const Footer = () => {
   useEffect(() => {
     async function getCategories() {
       try {
-        const { categories = [] } = await fetchBlogsData();
-        setCategories(categories);
+        const data = await fetchBlogsData();
+        console.log("Fetched categories in production:", data); // Debugging
+        setCategories(data.categories || []);
       } catch (error) {
         console.error("Error fetching categories:", error);
       }
