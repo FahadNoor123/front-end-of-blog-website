@@ -21,16 +21,21 @@ export default async function RelatedBlogs({ category, currentSlug }) {
             <div className="bg-white rounded-lg shadow-md overflow-hidden">
               {/* Blog Image (if available) */}
               {blog.blogImage?.length > 0 && (
-        <Image 
-          src={blog.blogImage[0]} // Ensure it's an array before accessing
-          alt={blog.title}
-          
-       
-          width={500} // Decreased width
-          height={300}
-          className="w-full h-auto sm:h-48 object-cover"
-          loading="lazy"
-        />
+         <Link href={`/blog/${blog.category.toLowerCase()}/${blog.slug}`} 
+         aria-label={`Read more about ${blog.title}`}
+            className="block hover:opacity-90 transition-opacity"
+                >
+          <Image 
+            src={blog.blogImage[0]} // Ensure it's an array before accessing
+            alt={blog.title}
+            
+
+            width={500} // Decreased width
+            height={300}
+            className="w-full h-auto sm:h-48 object-cover"
+            loading="lazy"
+          />
+          </Link>
       )}
             </div>
             <Link href={`/blog/${blog.category.toLowerCase()}/${blog.slug}`} className="block">
