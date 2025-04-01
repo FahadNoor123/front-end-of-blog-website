@@ -8,7 +8,7 @@ export async function middleware(req) {
   const adminRoutes = ["/admin", "/admin/payment-verification" ];
   const cookieStore = cookies(); // ✅ Removed `await`
   const token = await cookieStore.get("myAccessToken")?.value; // Await cookies() before using its value
-
+  console.log("Middleware is running...", token);
   if (!token) {
     console.log("No token found, redirecting to /login");
     return NextResponse.redirect(new URL("/login", req.url));
