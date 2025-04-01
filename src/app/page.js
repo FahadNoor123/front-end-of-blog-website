@@ -61,59 +61,60 @@ const paginatedNews = news.latest.slice(startIndex, startIndex + limit);
 
       {/* Main Content */}
       <main className="container mx-auto px-4 py-10">
-        {/* Featured News */}
-        {featuredNews ? (
-          <section className="mb-12">
-            <h2 className="text-2xl font-bold mb-6 pb-2 border-b border-gray-300">
-              Featured Story
-            </h2>
-            <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-              <div className="md:flex">
-                {/* Featured Image */}
-                {featuredNews.blogImage?.length > 0 && (
-                  <div className="md:flex-shrink-0 md:w-1/2">
-                    <Image
-                      src={featuredNews.blogImage[0]}
-                      alt={featuredNews.title}
-                      width={500}
-                      height={300}
-                      className="h-auto w-full object-cover md:h-[300px]"
-                      priority={true}
-                    />
-                  </div>
-                )}
-
-                {/* Featured Content */}
-                <div className="p-6 md:w-1/2">
-                  <div className="uppercase tracking-wide text-sm text-blue-600 font-semibold">
-                    {featuredNews.category}
-                  </div>
-                  <Link
-                    href={`/blog/${featuredNews.category.toLowerCase()}/${featuredNews.slug}`}
-                    className="block mt-2 text-2xl font-semibold text-gray-900 hover:text-blue-600"
-                  >
-                    {featuredNews.title}
-                  </Link>
-                  <div className="mt-3 text-gray-600">
-                    <div dangerouslySetInnerHTML={{ __html: featuredNews.content.split(" ").slice(0, 20).join(" ") + "..." }} />
-                  </div>
-
-                  <div className="mt-4 text-sm text-gray-500">
-                    <span>{new Date(featuredNews.publishedAt).toDateString()}</span>
-                  </div>
-                  <Link
-                    href={`/blog/${featuredNews.category.toLowerCase()}/${featuredNews.slug}`}
-                    className="mt-6 inline-block px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-200"
-                  >
-                    Read More
-                  </Link>
-                </div>
-              </div>
-            </div>
-          </section>
-        ) : (
-          <p className="text-gray-500">No featured news available</p>
+         {/* Featured News */}
+         {featuredNews ? (
+  <section className="mb-4">
+    <h2 className="text-xl md:text-2xl font-bold mb-4 md:mb-6 pb-2 border-b border-gray-300">
+      Featured Story
+    </h2>
+    <div className="bg-white rounded-lg shadow-lg overflow-hidden">
+      {/* Remove md:flex wrapper and use grid for better mobile control */}
+      <div className="flex flex-col md:flex-row">
+        {/* Featured Image - Constrain mobile height */}
+        {featuredNews.blogImage?.length > 0 && (
+          <div className="md:flex-shrink-0 md:w-1/2">
+            <Image
+              src={featuredNews.blogImage[0]}
+              alt={featuredNews.title}
+              width={500}
+              height={300}
+              className="w-full h-48 md:h-[300px] object-cover"
+              priority={true}
+            />
+          </div>
         )}
+
+        {/* Featured Content - Adjust padding for mobile */}
+        <div className="p-4 md:p-6 md:w-1/2">
+          <div className="uppercase tracking-wide text-sm text-blue-600 font-semibold">
+            {featuredNews.category}
+          </div>
+          <Link
+            href={`/blog/${featuredNews.category.toLowerCase()}/${featuredNews.slug}`}
+            className="block mt-1 md:mt-2 text-xl md:text-2xl font-semibold text-gray-900 hover:text-blue-600"
+          >
+            {featuredNews.title}
+          </Link>
+          <div className="mt-2 md:mt-3 text-gray-600 text-sm md:text-base">
+            <div dangerouslySetInnerHTML={{ __html: featuredNews.content.split(" ").slice(0, 20).join(" ") + "..." }} />
+          </div>
+
+          <div className="mt-2 md:mt-4 text-xs md:text-sm text-gray-500">
+            <span>{new Date(featuredNews.publishedAt).toDateString()}</span>
+          </div>
+          <Link
+            href={`/blog/${featuredNews.category.toLowerCase()}/${featuredNews.slug}`}
+            className="mt-4 md:mt-6 inline-block px-4 py-1.5 md:px-6 md:py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-200 text-sm md:text-base"
+          >
+            Read More
+          </Link>
+        </div>
+      </div>
+    </div>
+  </section>
+) : (
+  <p className="text-gray-500">No featured news available</p>
+)}
 
         {/* Latest News */}
         <section>
@@ -132,7 +133,7 @@ const paginatedNews = news.latest.slice(startIndex, startIndex + limit);
                   className="w-full h-auto sm:h-48 object-cover"
                   loading="lazy"
                 />
-                <div className="p-4">
+                <div className="p-2">
                   <span className="inline-block px-3 py-1 text-xs font-semibold text-blue-600 bg-blue-100 rounded-full">
                     {article.category}
                   </span>
