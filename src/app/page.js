@@ -60,7 +60,7 @@ const paginatedNews = news.latest.slice(startIndex, startIndex + limit);
       {/* <Banner/> */}
 
       {/* Main Content */}
-      <main className="container mx-auto px-4 py-10">
+      <main className="container mx-auto px-4 py-5">
          {/* Featured News */}
          {featuredNews ? (
   <section className="mb-4">
