@@ -161,7 +161,7 @@ const paginatedNews = news.latest.slice(startIndex, startIndex + limit);
                     {/* Larger Screens (More Content) */}
                     <div className="hidden sm:block" dangerouslySetInnerHTML={{ __html: article.content.split(" ").slice(0, 20).join(" ") + "..." }} />
 
-                    <Link href={`/blog/${article.slug}`} className="text-blue-600 hover:underline">
+                    <Link href={`/blog/${article.category.toLowerCase()}/${article.slug}`} className="text-blue-600 hover:underline">
                       Read More
                     </Link>
                   </div>
