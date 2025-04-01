@@ -17,7 +17,7 @@ export async function fetchBlogsData(category = "", page = 1, limit = 10) {
 // Extract featured blog (assuming only one featured blog is needed)
 const featuredBlog = data?.latest?.find(blog => blog.isFeatured) || null;
 console.log("Image URL:", featuredBlog.blogImage?.[1]);
-console.error("Theses are unique categories",uniqueCategories)
+process.stdout.writ("Theses are unique categories",uniqueCategories)
 
     return {
       news: {
