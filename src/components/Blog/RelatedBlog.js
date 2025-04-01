@@ -33,7 +33,7 @@ export default async function RelatedBlogs({ category, currentSlug }) {
         />
       )}
             </div>
-            <Link href={`/blog/${blog.slug}`} className="block">
+            <Link href={`/blog/${blog.category.toLowerCase()}/${blog.slug}`} className="block">
   <h3 className="mt-2 text-sm xs:text-base sm:text-lg md:text-xl font-semibold text-gray-900 hover:text-blue-600">
     {blog.title}
   </h3>
