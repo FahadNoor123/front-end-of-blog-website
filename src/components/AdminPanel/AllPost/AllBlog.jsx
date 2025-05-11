@@ -30,6 +30,41 @@ const AllBlog = () => {
     fetchBlogs();
   }, []);
 
+
+
+  
+  const handleDelete = async (slug) => {
+    const confirmDelete = confirm("Are you sure you want to delete this blog?");
+    if (!confirmDelete) return;
+    document.cookie.split(";").forEach(cookie => console.log("Browser Cookie:", cookie));
+  
+          const token= Cookies.get("myAccessToken");
+    try {
+      const res = await fetch(`/api/v1/blog/admin/deleteblog/${slug}`, {
+        method: 'DELETE',
+        credentials: "include", // 🔥 Ensures cookies are sent automatically
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`, // ✅ Adds Bearer token
+
+                
+            },
+      });
+  
+      if (!res.ok) throw new Error('Failed to delete blog');
+  
+      // Remove deleted blog from UI
+      setBlogs((prev) => ({
+        ...prev,
+        latest: prev.latest.filter((blog) => blog.slug !== slug),
+      }));
+  
+      alert('Blog deleted successfully!');
+    } catch (error) {
+      console.error(error);
+      alert('Something went wrong while deleting.');
+    }
+  };
   // Filter & search logic
   const filteredBlogs = (Array.isArray(blogs?.latest) ? blogs.latest : []).filter((blog) => {
     return (
@@ -101,9 +136,12 @@ const AllBlog = () => {
                   <td className="px-4 py-2 flex space-x-2">
                     <Link href={`/blog/${blog.category}/${blog.slug}`} className="text-blue-600 hover:underline">View</Link>
                     <Link href={`/admin/blog/edit/${blog.slug}`} className="text-yellow-600 hover:underline">Edit</Link>
-                    <button className="text-red-600 hover:underline" onClick={() => alert('Delete feature coming soon')}>
-                      Delete
-                    </button>
+                    <button
+                  className="text-red-600 hover:underline"
+                  onClick={() => handleDelete(blog.slug)}
+                >
+                  Delete
+                </button>
                   </td>
                 </tr>
               ))
