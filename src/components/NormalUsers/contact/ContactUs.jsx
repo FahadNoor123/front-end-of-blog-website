@@ -14,16 +14,36 @@ const ContactUs = () => {
     const { id, value } = e.target;
     setFormData((prev) => ({ ...prev, [id]: value }));
   };
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+  
+    // Validate fields
     if (!formData.name || !formData.email || !formData.message) {
       setFormStatus("Please fill out all fields.");
       return;
     }
-    // Simulate form submission
-    setFormStatus("Message sent successfully!");
-    setFormData({ name: "", email: "", message: "" });
+  
+    try {
+      const response = await fetch("/api/v1/blog/contact/contact-form", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+  
+      const data = await response.json();
+  
+      if (response.ok) {
+        setFormStatus("Message sent successfully!");
+        setFormData({ name: "", email: "", message: "" });
+      } else {
+        setFormStatus(data.message || "Something went wrong. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      setFormStatus("Server error. Please try again later.");
+    }
   };
 
   return (
@@ -79,7 +99,7 @@ const ContactUs = () => {
                 e.target.style.height = "auto"; // Reset height to recalculate
                 e.target.style.height = `${e.target.scrollHeight}px`; // Set new height
               }}
-              className="border border-gray-300 p-2 sm:p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-700 resize-none overflow-hidden"
+              className="border border-gray-300 p-2 sm:p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-700 resize-none overflow-hidden resize-y"
               placeholder="Write your message here"
               required
             ></textarea>

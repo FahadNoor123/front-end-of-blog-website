@@ -34,6 +34,7 @@ export default function BlogSidebar({ role }) {
         { name: "Scheduled Posts", path: "/admin/scheduled", icon: Calendar },
       ]
     },
+    { name: "Contact Forms", path: "/admin/contact-form", icon: MessageCircle, roles: ["admin"] },
     { 
       name: "Comments", 
       icon: MessageCircle, 
