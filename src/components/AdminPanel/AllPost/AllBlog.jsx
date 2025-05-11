@@ -99,7 +99,7 @@ const AllBlog = () => {
                   </td>
                   <td className="px-4 py-2">{blog.publishedAt ? new Date(blog.publishedAt).toLocaleDateString() : 'N/A'}</td>
                   <td className="px-4 py-2 flex space-x-2">
-                    <Link href={`/blog/${blog.slug}`} className="text-blue-600 hover:underline">View</Link>
+                    <Link href={`/blog/${blog.category}/${blog.slug}`} className="text-blue-600 hover:underline">View</Link>
                     <Link href={`/admin/blog/edit/${blog.slug}`} className="text-yellow-600 hover:underline">Edit</Link>
                     <button className="text-red-600 hover:underline" onClick={() => alert('Delete feature coming soon')}>
                       Delete
