@@ -1,7 +1,6 @@
 "use client";  // ✅ Now it runs on the client side
 import '../app/globals.css'; // Global styles
 import { usePathname } from 'next/navigation';
-import Navbar from '../components/NormalUsers/Navbar/Navbar';
 import Footer from '../components/NormalUsers/Footer/Footer';
 import ContactUs from './NormalUsers/contact/ContactUs';
 import Login from './NormalUsers/Login/Login';

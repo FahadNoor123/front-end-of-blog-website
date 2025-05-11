@@ -149,28 +149,7 @@ const Navbarsecond = () => {
         </Link>
       </li>
     )}
-    <li>
-      {loading ? (
-        <div className="animate-pulse flex items-center space-x-2">
-          <div className="w-8 h-8 bg-gray-300 rounded-full"></div>
-          <div className="w-24 h-4 bg-gray-300 rounded"></div>
-        </div>
-      ) : user ? (
-        <Link
-          href="/profile"
-          className="flex items-center space-x-2 hover:text-gray-400"
-        >
-          <p className="font-medium cursor-pointer">{user.username}</p>
-          <Image
-            src={user.profileImage || "/default-avatar.png"}
-            alt="Profile"
-            width={40}
-            height={40}
-            className="rounded-full border-2 border-blue-300 hover:border-blue-500 transition"
-          />
-        </Link>
-      ) : null}
-    </li>
+   
   </ul>
 </nav>
 
