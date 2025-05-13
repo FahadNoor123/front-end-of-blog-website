@@ -115,8 +115,7 @@ export default function Login() {
           setIsAdmin(false);
         }
 
-        router.push('/');
-        window.location.reload();
+        router.replace('/');
       } else {
         Swal.fire({
           icon: 'error',
