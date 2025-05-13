@@ -1,4 +1,5 @@
-"use client"
+"use client";
+
 import { useState } from 'react';
 import Swal from 'sweetalert2';
 import { PropagateLoader } from 'react-spinners';
@@ -15,7 +16,7 @@ function Register({ setFormAction, setShowAdditionalFields }) {
       const response = await fetch('/api/v1/users/register', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',  // Set Content-Type
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({  
           email: registerData.email,  
@@ -68,79 +69,86 @@ function Register({ setFormAction, setShowAdditionalFields }) {
   };
 
   return (
-    <div
-      className="flex items-center justify-center min-h-screen bg-cover bg-center"
-      style={{ backgroundImage: `url('/login.jpg')` }}
-    >
-      <section className="bg-white p-8 md:p-12 rounded-lg shadow-xl w-full max-w-lg">
-        <div className="text-center mb-6">
-          <h1 className="text-3xl font-extrabold" style={{ color: 'rgb(40, 162, 242)' }}>
-            Student Registration Portal
-          </h1>
-          <p className="mt-2 text-gray-600">
+    <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="w-full max-w-md p-8 space-y-8 bg-white rounded-xl shadow-md">
+        <div className="text-center">
+          <h1 className="text-3xl font-bold text-gray-900">GlobalNews</h1>
+          <h2 className="mt-4 text-2xl font-semibold text-gray-800">Create your account</h2>
+          <p className="mt-2 text-sm text-gray-600">
+            Join our community to access exclusive content
+          </p>
+        </div>
+
+        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+          <div className="space-y-4">
+            <div>
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+                Email address <span className="text-red-500">*</span>
+              </label>
+              <input
+                id="email"
+                type="email"
+                name="email"
+                autoComplete="email"
+                required
+                className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                placeholder="your@email.com"
+              />
+            </div>
+
+            <div>
+              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+                Password <span className="text-red-500">*</span>
+              </label>
+              <input
+                id="password"
+                type="password"
+                name="password"
+                autoComplete="new-password"
+                required
+                className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                placeholder="••••••••"
+                minLength="6"
+              />
+            </div>
+          </div>
+
+          <div>
+            <button
+              type="submit"
+              disabled={isLoading}
+              className={`w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 ${
+                isLoading ? 'opacity-75 cursor-not-allowed' : ''
+              }`}
+            >
+              {isLoading ? (
+                <>
+                  <PropagateLoader color="white" size={8} className="mr-2" />
+                  Registering...
+                </>
+              ) : (
+                'Register'
+              )}
+            </button>
+          </div>
+        </form>
+
+        <div className="mt-6 text-center">
+          <p className="text-sm text-gray-600">
             Already have an account?{' '}
             <a
+              href="/login"
               onClick={() => {
                 setFormAction('/api/v1/users/login');
                 setShowAdditionalFields(false);
               }}
-              href="/login"
-              className="font-semibold hover:underline"
-              style={{ color: 'rgb(40, 162, 242)' }}
+              className="font-medium text-blue-600 hover:text-blue-500"
             >
-              Login here
+              Sign in
             </a>
           </p>
         </div>
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-              Email Address <span className="text-red-500 text-lg">*</span>
-            </label>
-            <input
-              id="email"
-              type="email"
-              name="email"
-              placeholder="Enter your email"
-              required
-              className="mt-1 block w-full px-4 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-            />
-          </div>
-          <div>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-              Password <span className="text-red-500 text-lg">*</span>
-            </label>
-            <input
-              id="password"
-              type="password"
-              name="password"
-              placeholder="Enter your password"
-              required
-              className="mt-1 block w-full px-4 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-            />
-          </div>
-
-          <button
-            type="submit"
-            className={`w-full px-4 py-2 text-white font-semibold rounded-md shadow-sm ${
-              isLoading ? 'cursor-not-allowed opacity-70' : 'hover:bg-blue-600'
-            }`}
-            style={{
-              backgroundColor: 'rgb(40, 162, 242)',
-            }}
-            disabled={isLoading}
-          >
-            {isLoading ? (
-              <span className="flex items-center justify-center">
-                <PropagateLoader color="white" size={8} />
-                <span className="ml-2">Registering...</span>
-              </span>
-            ) : (
-              'Register'
-            )}
-          </button>
-        </form>
-      </section>
+      </div>
     </div>
   );
 }
