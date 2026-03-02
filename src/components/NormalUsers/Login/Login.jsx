@@ -140,7 +140,7 @@ export default function Login() {
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
       <div className="w-full max-w-md p-8 space-y-8 bg-white rounded-xl shadow-md">
         <div className="text-center">
-          <h1 className="text-3xl font-bold text-gray-900">GlobalNews</h1>
+          <h1 className="text-3xl font-bold text-gray-900">Warnnews</h1>
           <h2 className="mt-4 text-2xl font-semibold text-gray-800">Welcome back</h2>
           <p className="mt-2 text-sm text-gray-600">
             Sign in to your account to continue
