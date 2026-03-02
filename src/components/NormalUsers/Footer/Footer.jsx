@@ -28,7 +28,7 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* About Section */}
           <div>
-            <h3 className="text-xl font-bold mb-4">Global News Network</h3>
+            <h3 className="text-xl font-bold mb-4">Warn News</h3>
             <p className="text-gray-400">
               Bringing you the latest news and updates from around the world. 
               Trusted, accurate, and timely reporting since 2010.

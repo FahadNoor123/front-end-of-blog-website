@@ -92,7 +92,7 @@ const Navbarsecond = () => {
       <div className="flex justify-between items-center">
         {/* Logo & Title */}
         <div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-800">Global News Network</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-800">Warn News</h1>
           <p className="text-gray-600 text-sm sm:text-base">Your source for international perspectives</p>
         </div>
         {/* Mobile Menu Button */}
