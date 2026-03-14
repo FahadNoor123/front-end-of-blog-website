@@ -85,13 +85,46 @@ export default async function BlogDetails({ params }) {
     <>
     {/* SEO Meta Tags */}
     <Head>
-    <title>{blog.title} | My Blog</title>
-    <meta name="description" content={blog.excerpt || blog.content.slice(0, 150)} />
-    <meta property="og:title" content={blog.title} />
-    <meta property="og:description" content={blog.excerpt || blog.content.slice(0, 150)} />
+    <title>{blog.metaTitle || blog.title} | Warnnews</title>
+    <meta name="description" content={blog.metaDescription || blog.content.slice(0, 150)} />
+    <meta name="keywords" content={blog.keywords?.join(', ')} />
+    <meta property="og:title" content={blog.metaTitle || blog.title} />
+    <meta property="og:description" content={blog.metaDescription || blog.content.slice(0, 150)} />
     <meta property="og:image" content={blog.blogImage?.[0] || "/default.jpg"} />
-    <meta property="og:url" content={`https://yourdomain.com/blog/${blog.slug}`} />
-    <link rel="canonical" href={`https://yourdomain.com/blog/${blog.slug}`} />
+    <meta property="og:url" content={`https://warnnews.com/blog/${category}/${blog.slug}`} />
+    <meta property="og:type" content="article" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="canonical" href={`https://warnnews.com/blog/${category}/${blog.slug}`} />
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{
+        __html: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Article",
+          "headline": blog.title,
+          "description": blog.metaDescription || blog.content.slice(0, 150),
+          "image": blog.blogImage,
+          "author": {
+            "@type": "Person",
+            "name": blog.author?.name || "Admin"
+          },
+          "publisher": {
+            "@type": "Organization",
+            "name": "Warnnews",
+            "logo": {
+              "@type": "ImageObject",
+              "url": "https://warnnews.com/logo.png"
+            }
+          },
+          "datePublished": blog.createdAt,
+          "dateModified": blog.updatedAt,
+          "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": `https://warnnews.com/blog/${category}/${blog.slug}`
+          }
+        })
+      }}
+    />
   </Head>
     <div className="min-h-screen bg-gray-50 pb-8 sm:pb-16">
       {/* Fancy Header with Full-width Image */}

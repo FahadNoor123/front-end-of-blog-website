@@ -3,6 +3,21 @@ import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 
+
+export async function generateMetadata({ params }) {
+  const { category } = params;
+  return {
+    title: `${category.charAt(0).toUpperCase() + category.slice(1)} News - Warnnews`,
+    description: `Read the latest news and articles about ${category} on Warnnews. Stay informed with quality content.`,
+    keywords: `${category}, news, blog, articles`,
+    openGraph: {
+      title: `${category.charAt(0).toUpperCase() + category.slice(1)} News - Warnnews`,
+      description: `Latest ${category} news and updates.`,
+      url: `https://warnnews.com/blog/${category}`,
+      type: 'website',
+    },
+  };
+}
 export default async function CategoryPage({ params, searchParams }) {
   const { category } = params; // Extract category from URL
   const page = parseInt(searchParams?.page) || 1;
