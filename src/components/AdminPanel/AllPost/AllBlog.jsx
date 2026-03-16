@@ -15,6 +15,17 @@ const AllBlog = () => {
   const [statusModal, setStatusModal] = useState(null);
   const [scheduledDate, setScheduledDate] = useState(new Date());
 
+  // Update scheduledDate when opening modal for a specific blog
+  const openScheduleModal = (blogSlug) => {
+    const blog = blogs?.blogs?.find(b => b.slug === blogSlug);
+    if (blog?.scheduledAt) {
+      setScheduledDate(new Date(blog.scheduledAt));
+    } else {
+      setScheduledDate(new Date());
+    }
+    setStatusModal(blogSlug);
+  };
+
   // Lightweight table spinner for loading state
   const TableLoader = () => (
     <div className="flex flex-col items-center gap-2">
@@ -173,63 +184,122 @@ const AllBlog = () => {
                   <td className="px-4 py-2">{blog.author?.name || blog.author?.email || 'Unknown'}</td>
                   <td className="px-4 py-2">
                     {blog.postStatus === 'Published' ? (
-                      <span className="text-green-600 font-semibold">Published</span>
+                      <span className="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-medium">Published</span>
                     ) : blog.postStatus === 'Scheduled' ? (
-                      <span className="text-orange-500 font-semibold">Scheduled</span>
+                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                        new Date(blog.scheduledAt) <= new Date() 
+                          ? 'bg-red-100 text-red-800' 
+                          : 'bg-orange-100 text-orange-800'
+                      }`}>
+                        {new Date(blog.scheduledAt) <= new Date() ? 'Overdue' : 'Scheduled'}
+                      </span>
                     ) : (
-                      <span className="text-gray-500 font-semibold">Draft</span>
+                      <span className="bg-gray-100 text-gray-800 px-2 py-1 rounded-full text-xs font-medium">Draft</span>
                     )}
                   </td>
-                  <td className="px-4 py-2">{blog.publishedAt ? new Date(blog.publishedAt).toLocaleDateString() : 'N/A'}</td>
-                  <td className="px-4 py-2">{blog.scheduledAt ? new Date(blog.scheduledAt).toLocaleString() : 'N/A'}</td>
+                  <td className="px-4 py-2 text-sm">
+                    {blog.publishedAt ? (
+                      <div>
+                        <div>{new Date(blog.publishedAt).toLocaleDateString()}</div>
+                        <div className="text-gray-500 text-xs">{new Date(blog.publishedAt).toLocaleTimeString()}</div>
+                      </div>
+                    ) : (
+                      <span className="text-gray-400">Not published</span>
+                    )}
+                  </td>
+                  <td className="px-4 py-2 text-sm">
+                    {blog.scheduledAt ? (
+                      <div>
+                        <div className={new Date(blog.scheduledAt) <= new Date() ? 'text-red-600 font-medium' : ''}>
+                          {new Date(blog.scheduledAt).toLocaleDateString()}
+                        </div>
+                        <div className={`text-xs ${new Date(blog.scheduledAt) <= new Date() ? 'text-red-500' : 'text-gray-500'}`}>
+                          {new Date(blog.scheduledAt).toLocaleTimeString()}
+                        </div>
+                      </div>
+                    ) : (
+                      <span className="text-gray-400">Not scheduled</span>
+                    )}
+                  </td>
                   <td className="px-4 py-2">
-                    <div className="flex flex-wrap gap-2 items-center">
+                    <div className="flex flex-wrap gap-1 items-center">
                       <Link
                         href={`/blog/${blog.category}/${blog.slug}`}
                         className="text-blue-600 hover:text-blue-800 p-2 rounded transition-colors"
-                        title="View"
+                        title="View Blog"
                       >
-                        <FaEye size={18} />
+                        <FaEye size={16} />
                       </Link>
                       <Link
                         href={`/admin/blog/edit/${blog.slug}`}
                         className="text-yellow-600 hover:text-yellow-800 p-2 rounded transition-colors"
-                        title="Edit"
+                        title="Edit Blog"
                       >
-                        <FaEdit size={18} />
+                        <FaEdit size={16} />
                       </Link>
-                      {blog.postStatus !== 'Published' && (
-                        <button
-                          className="text-green-600 hover:text-green-800 p-2 rounded transition-colors"
-                          onClick={() => handleStatusUpdate(blog.slug, 'Published')}
-                          title="Publish"
-                        >
-                          <FaPlay size={18} />
-                        </button>
+                      
+                      {/* Status-based actions */}
+                      {blog.postStatus === 'Draft' && (
+                        <>
+                          <button
+                            className="text-green-600 hover:text-green-800 p-2 rounded transition-colors"
+                            onClick={() => handleStatusUpdate(blog.slug, 'Published')}
+                            title="Publish Now"
+                          >
+                            <FaPlay size={16} />
+                          </button>
+                          <button
+                            className="text-purple-600 hover:text-purple-800 p-2 rounded transition-colors"
+                            onClick={() => openScheduleModal(blog.slug)}
+                            title="Schedule Post"
+                          >
+                            <FcCalendar size={16} />
+                          </button>
+                        </>
                       )}
-                      {blog.postStatus !== 'Draft' && (
+                      
+                      {blog.postStatus === 'Scheduled' && (
+                        <>
+                          <button
+                            className="text-green-600 hover:text-green-800 p-2 rounded transition-colors"
+                            onClick={() => handleStatusUpdate(blog.slug, 'Published')}
+                            title="Publish Now"
+                          >
+                            <FaPlay size={16} />
+                          </button>
+                          <button
+                            className="text-gray-600 hover:text-gray-800 p-2 rounded transition-colors"
+                            onClick={() => handleStatusUpdate(blog.slug, 'Draft')}
+                            title="Move to Draft"
+                          >
+                            <FaFileAlt size={16} />
+                          </button>
+                          <button
+                            className="text-purple-600 hover:text-purple-800 p-2 rounded transition-colors"
+                            onClick={() => openScheduleModal(blog.slug)}
+                            title="Reschedule"
+                          >
+                            <FcCalendar size={16} />
+                          </button>
+                        </>
+                      )}
+                      
+                      {blog.postStatus === 'Published' && (
                         <button
                           className="text-gray-600 hover:text-gray-800 p-2 rounded transition-colors"
                           onClick={() => handleStatusUpdate(blog.slug, 'Draft')}
-                          title="Move to Draft"
+                          title="Unpublish"
                         >
-                          <FaFileAlt size={18} />
+                          <FaFileAlt size={16} />
                         </button>
                       )}
-                      <button
-                        className="text-purple-600 hover:text-purple-800 p-2 rounded transition-colors"
-                        onClick={() => setStatusModal(blog.slug)}
-                        title="Schedule"
-                      >
-                        {/* <FaCalendarAlt size={18} /> */}
-                         <FcCalendar  size={18} />
-                      </button>
+                      
                       <button
                         className="text-red-600 hover:text-red-800 p-2 rounded transition-colors"
                         onClick={() => handleDelete(blog.slug)}
-                        title="Delete"
+                        title="Delete Blog"
                       >
-                        <FaTrash size={18} />
+                        <FaTrash size={16} />
                       </button>
                     </div>
                   </td>
@@ -248,27 +318,39 @@ const AllBlog = () => {
       {statusModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full mx-4">
-            <h3 className="text-lg font-bold mb-4">Schedule Post</h3>
-            <input
-              type="datetime-local"
-              value={scheduledDate.toISOString().slice(0, 16)}
-              onChange={(e) => setScheduledDate(new Date(e.target.value))}
-              className="w-full border p-2 rounded mb-4"
-            />
+            <h3 className="text-lg font-bold mb-4">
+              {blogs?.blogs?.find(b => b.slug === statusModal)?.scheduledAt ? 'Reschedule Post' : 'Schedule Post'}
+            </h3>
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Select Date & Time
+              </label>
+              <input
+                type="datetime-local"
+                value={scheduledDate.toISOString().slice(0, 16)}
+                onChange={(e) => setScheduledDate(new Date(e.target.value))}
+                min={new Date().toISOString().slice(0, 16)}
+                className="w-full border p-2 rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              />
+            </div>
             <div className="flex gap-2">
               <button
-                className="flex-1 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+                className="flex-1 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors"
                 onClick={() => handleStatusUpdate(statusModal, 'Scheduled')}
+                disabled={scheduledDate <= new Date()}
               >
-                Schedule
+                {blogs?.blogs?.find(b => b.slug === statusModal)?.scheduledAt ? 'Reschedule' : 'Schedule'}
               </button>
               <button
-                className="flex-1 bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500"
+                className="flex-1 bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500 transition-colors"
                 onClick={() => setStatusModal(null)}
               >
                 Cancel
               </button>
             </div>
+            {scheduledDate <= new Date() && (
+              <p className="text-red-500 text-sm mt-2">Please select a future date and time.</p>
+            )}
           </div>
         </div>
       )}
