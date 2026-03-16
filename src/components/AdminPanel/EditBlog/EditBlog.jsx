@@ -246,9 +246,17 @@ if (existingImages.length > 0) {
     }
   };
 
+ // Lightweight table spinner for loading state
+const TableLoader = () => (
+  <div className="flex items-center justify-center min-h-screen">
+    <div className="flex flex-col items-center gap-2">
+      <div className="w-10 h-10 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin" />
+    </div>
+  </div>
+);
   // Conditional rendering for loading state
   if (isLoading) {
-    return <div>Loading blog post...</div>;
+    return <div>  <TableLoader /></div>;
   }
 
   return (
