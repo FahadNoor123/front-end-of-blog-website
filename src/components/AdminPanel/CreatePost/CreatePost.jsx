@@ -93,7 +93,13 @@ const ItalicIcon = () => <IconItalic size={16} stroke={3.5} />;
 
 
 
-
+// Lightweight table spinner for loading state
+  const TableLoader = () => (
+    <div className="flex flex-col items-center gap-2">
+      <div className="w-10 h-10 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin" />
+     
+    </div>
+  );
 
 
 
@@ -123,27 +129,31 @@ const ItalicIcon = () => <IconItalic size={16} stroke={3.5} />;
   console.log("Blog images:", formData.blogImage);
 
   // Handle form submission
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e, status = null) => {
     e.preventDefault();
     const formDataObject = new FormData(); // ✅ Use a different name to avoid conflicts
+    
+    // Determine the status to use
+    const finalStatus = status || formData.status;
   
     // ✅ Append text fields
-   // ✅ Append all text fields
-  formDataObject.append("title", formData.title);
-  formDataObject.append("category", formData.category);
-  formDataObject.append("slug", formData.slug);
-  formDataObject.append("metaTitle", formData.metaTitle);
-  console.log("this is slug",formData.slug)
-  formData.tags.forEach((tag) => {
-    formDataObject.append("tags", tag);
-  });
-  formData.keywords.forEach((keyword) => {
-    formDataObject.append("keywords[]", keyword);
-  });
-  formDataObject.append("metaDescription", formData.metaDescription);
-  formDataObject.append("content", editor.getHTML());
-  formDataObject.append("status", formData.status);
-  formDataObject.append("scheduleDate", formData.scheduleDate.toISOString()); // Convert date to string
+    formDataObject.append("title", formData.title);
+    formDataObject.append("category", formData.category);
+    formDataObject.append("slug", formData.slug);
+    formDataObject.append("metaTitle", formData.metaTitle);
+    console.log("this is slug",formData.slug)
+    formData.tags.forEach((tag) => {
+      formDataObject.append("tags", tag);
+    });
+    formData.keywords.forEach((keyword) => {
+      formDataObject.append("keywords[]", keyword);
+    });
+    formDataObject.append("metaDescription", formData.metaDescription);
+    formDataObject.append("content", editor.getHTML());
+    formDataObject.append("postStatus", finalStatus); // Changed from "status" to "postStatus"
+    if (finalStatus === "Scheduled") {
+      formDataObject.append("scheduledAt", formData.scheduleDate.toISOString()); // Convert date to string
+    }
     
     // ✅ Ensure `blogImage` is an array before appending files
     // ✅ Ensure `blogImage` is an array before appending files
@@ -180,7 +190,7 @@ if (Array.isArray(formData.blogImage)) {
       {/* Left Side: Blog Form & Editor */}
       <div className="w-2/3 p-4 bg-white rounded-lg">
         <h2 className="text-2xl font-bold mb-4">Create New Blog Post</h2>
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form id="blog-form" onSubmit={handleSubmit} className="space-y-4">
           {/* Title */}
           <input type="text" name="title" value={formData.title} onChange={handleChange} placeholder="Blog Title" className="w-full border p-2 rounded" required />
 
@@ -195,7 +205,7 @@ if (Array.isArray(formData.blogImage)) {
           </select>
 
           <div className="mb-4">
-  <label className="block font-semibold mb-2">Content</label>
+  <label className="block font-semibold mb-2">Blog Content Section</label>
   {editor ? (
     <RichTextEditor editor={editor} variant="subtle">
       
@@ -256,7 +266,7 @@ if (Array.isArray(formData.blogImage)) {
       
     </RichTextEditor>
   ) : (
-    <p>Loading editor...</p>
+     <TableLoader />
   )}
 </div>
 
@@ -267,83 +277,111 @@ if (Array.isArray(formData.blogImage)) {
           <textarea name="metaDescription" value={formData.metaDescription} onChange={handleChange} placeholder="Meta Description" className="w-full border p-2 rounded" required />
           <input type="text" name="keywords" value={formData.keywords} onChange={handleChange} placeholder="Keywords (comma separated)" className="w-full border p-2 rounded" required />
 
-          {/* Submit Button */}
-          <button type="submit" className="bg-blue-500 text-white p-2 rounded w-full">
-            Create Blog
-          </button>
+          {/* Tags Input */}
+          <label className="block font-semibold mb-2">SEO Tags</label>
+          <input
+            type="text"
+            name="tags"
+            value={Array.isArray(formData.tags) ? formData.tags.join(", ") : formData.tags || ""}
+            onChange={handleChange}
+            placeholder="Tags (comma separated)"
+            className="w-full border p-2 rounded"
+            required
+          />
         </form>
       </div>
 
       {/* Right Side: Extra Features */}
       <div className="w-1/3 p-4 ml-4 bg-white rounded-lg shadow">
-        {/* Top Right Buttons */}
-        <div className="flex justify-end gap-3 mb-4">
-          <button className="bg-green-500 text-white px-4 py-2 rounded">Publish</button>
-          <button className="bg-gray-400 text-white px-4 py-2 rounded">Save Draft</button>
+        {/* Top Right Buttons - Fixed Layout for Long Text */}
+        <div className="grid grid-cols-2 gap-2 mb-4">
+          <button 
+            type="button"
+            onClick={(e) => handleSubmit(e, 'Published')}
+            className="bg-green-500 hover:bg-green-600 text-white px-3 py-2 rounded text-sm font-semibold truncate"
+          >
+            Publish
+          </button>
+          <button 
+            type="button"
+            onClick={(e) => handleSubmit(e, 'Draft')}
+            className="bg-gray-400 hover:bg-gray-500 text-white px-3 py-2 rounded text-sm font-semibold truncate"
+          >
+            Save Draft
+          </button>
         </div>
 
         {/* Feature Image Upload */}
         <div className="mb-4">
-      <label className="block font-semibold mb-2">Feature Images
-      <input
-      name="blogImage"
-        type="file"
-        accept="image/*"
-        multiple
-        className="w-full border p-2 rounded"
-        onChange={handleImageChange}
-      />
-</label>
-      {/* Image Previews */}
-      {imagePreviews.length > 0 && (
-        <div className="mt-3 grid grid-cols-3 gap-2">
-          {imagePreviews.map((image, index) => (
-            <img
-              key={index}
-              src={image}
-              alt={`Preview ${index + 1}`}
-              className="w-32 h-32 object-cover border rounded"
-            />
-          ))}
+          <label className="block font-semibold mb-2">Feature Images</label>
+          <input
+            name="blogImage"
+            type="file"
+            accept="image/*"
+            multiple
+            className="w-full border p-2 rounded"
+            onChange={handleImageChange}
+          />
+          {/* Image Previews */}
+          {imagePreviews.length > 0 && (
+            <div className="mt-3 grid grid-cols-3 gap-2">
+              {imagePreviews.map((image, index) => (
+                <img
+                  key={index}
+                  src={image}
+                  alt={`Preview ${index + 1}`}
+                  className="w-32 h-32 object-cover border rounded"
+                />
+              ))}
+            </div>
+          )}
         </div>
-      )}
-    </div>
-
-        {/* Tags Input */}
-        <label className="block font-semibold mb-2">SEO Tags</label>
-
-        <input
-  type="text"
-  name="tags"
-  value={Array.isArray(formData.tags) ? formData.tags.join(", ") : ""} // ✅ Safe conversion
-  onChange={handleChange}
-  placeholder="Tags (comma separated)"
-  className="w-full border p-2 rounded mb-4"
-  required
-/>
 
         {/* Publish Settings */}
         <div className="mb-4">
           <label className="block font-semibold mb-2">Publish Settings</label>
-          <select name="status" value={formData.status} onChange={handleChange} className="w-full border p-2 rounded">
-            <option value="Publish">Publish</option>
+          <select 
+            name="status" 
+            value={formData.status} 
+            onChange={handleChange} 
+            className="w-full border p-2 rounded"
+          >
+            <option value="Published">Publish Now</option>
             <option value="Draft">Save as Draft</option>
-            <option value="Schedule">Schedule</option>
+            <option value="Scheduled">Schedule Post</option>
           </select>
 
-          {/* Show Date Picker if "Schedule" is selected */}
-          {formData.status === "Schedule" && (
+          {/* Show Date Picker if "Scheduled" is selected */}
+          {formData.status === "Scheduled" && (
             <div className="mt-3">
               <label className="block font-semibold mb-2">Select Date & Time</label>
-              <DatePicker selected={formData.scheduleDate} onChange={(date) => setFormData({ ...formData, scheduleDate: date })} showTimeSelect dateFormat="Pp" className="w-full border p-2 rounded" />
+              <DatePicker 
+                selected={formData.scheduleDate} 
+                onChange={(date) => setFormData({ ...formData, scheduleDate: date })} 
+                showTimeSelect 
+                dateFormat="Pp" 
+                className="w-full border p-2 rounded" 
+              />
             </div>
           )}
         </div>
        
-        {/* Preview & Delete Buttons */}
-        <div className="flex justify-between">
-          <button className="bg-gray-500 text-white px-4 py-2 rounded"  onClick={handlePreview}>Preview</button>
-          <button className="bg-red-500 text-white px-4 py-2 rounded">Delete</button>
+        {/* Preview & Submit Buttons */}
+        <div className="flex gap-2">
+          <button 
+            type="button"
+            className="flex-1 bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded"
+            onClick={handlePreview}
+          >
+            Preview
+          </button>
+          <button 
+            type="submit"
+            form="blog-form"
+            className="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded font-semibold"
+          >
+            Submit
+          </button>
         </div>
       </div>
       {previewOpen && (
